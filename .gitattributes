@@ -3,3 +3,4 @@
 *.py text eol=lf
 Dockerfile text eol=lf
 Makefile text eol=lf
+eval/cases/** -text
