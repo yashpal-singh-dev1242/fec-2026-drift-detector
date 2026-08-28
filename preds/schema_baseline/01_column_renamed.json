@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "columns ['customer_id'] disappeared and ['cust_id'] appeared"
+}

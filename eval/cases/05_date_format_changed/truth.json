@@ -1,0 +1,11 @@
+{
+  "defect_type": "date_format_changed",
+  "affected_columns": [
+    "order_date"
+  ],
+  "severity": "high",
+  "schema_check_catches": false,
+  "description": "order_date switched from ISO to DD/MM/YYYY",
+  "case_id": "05_date_format_changed",
+  "has_defect": true
+}

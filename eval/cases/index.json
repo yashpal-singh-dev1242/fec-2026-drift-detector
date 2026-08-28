@@ -1,0 +1,86 @@
+[
+  {
+    "case_id": "01_column_renamed",
+    "has_defect": true,
+    "defect_type": "column_renamed",
+    "severity": "high",
+    "schema_check_catches": true
+  },
+  {
+    "case_id": "02_column_dropped",
+    "has_defect": true,
+    "defect_type": "column_dropped",
+    "severity": "high",
+    "schema_check_catches": true
+  },
+  {
+    "case_id": "03_column_added",
+    "has_defect": true,
+    "defect_type": "column_added",
+    "severity": "low",
+    "schema_check_catches": true
+  },
+  {
+    "case_id": "04_type_changed",
+    "has_defect": true,
+    "defect_type": "type_changed",
+    "severity": "high",
+    "schema_check_catches": true
+  },
+  {
+    "case_id": "05_date_format_changed",
+    "has_defect": true,
+    "defect_type": "date_format_changed",
+    "severity": "high",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "06_null_surge",
+    "has_defect": true,
+    "defect_type": "null_surge",
+    "severity": "medium",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "07_unit_change_currency",
+    "has_defect": true,
+    "defect_type": "unit_change",
+    "severity": "critical",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "08_enum_value_drift",
+    "has_defect": true,
+    "defect_type": "enum_value_drift",
+    "severity": "high",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "09_precision_loss",
+    "has_defect": true,
+    "defect_type": "precision_loss",
+    "severity": "high",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "10_encoding_change",
+    "has_defect": true,
+    "defect_type": "encoding_change",
+    "severity": "medium",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "11_duplicate_rows",
+    "has_defect": true,
+    "defect_type": "duplicate_rows",
+    "severity": "critical",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "12_control_no_defect",
+    "has_defect": false,
+    "defect_type": "none",
+    "severity": "none",
+    "schema_check_catches": false
+  }
+]

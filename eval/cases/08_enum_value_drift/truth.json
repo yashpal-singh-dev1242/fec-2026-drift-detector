@@ -1,0 +1,11 @@
+{
+  "defect_type": "enum_value_drift",
+  "affected_columns": [
+    "status"
+  ],
+  "severity": "high",
+  "schema_check_catches": false,
+  "description": "status values changed to uppercase",
+  "case_id": "08_enum_value_drift",
+  "has_defect": true
+}

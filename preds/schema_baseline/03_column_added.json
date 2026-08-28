@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "promo_code"
+  ],
+  "defect_type": "column_added",
+  "severity": "low",
+  "explanation": "unexpected new columns: ['promo_code']"
+}

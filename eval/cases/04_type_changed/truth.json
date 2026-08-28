@@ -1,0 +1,11 @@
+{
+  "defect_type": "type_changed",
+  "affected_columns": [
+    "order_id"
+  ],
+  "severity": "high",
+  "schema_check_catches": true,
+  "description": "order_id changed from integer to prefixed string",
+  "case_id": "04_type_changed",
+  "has_defect": true
+}

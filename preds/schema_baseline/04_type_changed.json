@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "order_id dtype changed int -> str"
+}

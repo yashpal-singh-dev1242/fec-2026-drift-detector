@@ -1,0 +1,9 @@
+{
+  "defect_type": "none",
+  "affected_columns": [],
+  "severity": "none",
+  "schema_check_catches": false,
+  "description": "no drift; normal day-over-day variation only",
+  "case_id": "12_control_no_defect",
+  "has_defect": false
+}

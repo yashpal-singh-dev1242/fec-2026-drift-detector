@@ -1,0 +1,11 @@
+{
+  "defect_type": "unit_change",
+  "affected_columns": [
+    "amount"
+  ],
+  "severity": "critical",
+  "schema_check_catches": false,
+  "description": "amount switched from dollars to cents (100x)",
+  "case_id": "07_unit_change_currency",
+  "has_defect": true
+}

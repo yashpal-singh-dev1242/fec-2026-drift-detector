@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "amount dtype changed float -> int"
+}

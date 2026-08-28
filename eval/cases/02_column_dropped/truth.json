@@ -1,0 +1,11 @@
+{
+  "defect_type": "column_dropped",
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "severity": "high",
+  "schema_check_catches": true,
+  "description": "discount_pct column removed",
+  "case_id": "02_column_dropped",
+  "has_defect": true
+}

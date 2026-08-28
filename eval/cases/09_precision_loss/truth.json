@@ -1,0 +1,12 @@
+{
+  "defect_type": "precision_loss",
+  "affected_columns": [
+    "amount",
+    "unit_price"
+  ],
+  "severity": "high",
+  "schema_check_catches": false,
+  "description": "monetary values rounded to whole units, decimals lost",
+  "case_id": "09_precision_loss",
+  "has_defect": true
+}

@@ -1,0 +1,136 @@
+{
+  "summary": {
+    "label": "schema_baseline",
+    "primary_score": 0.475,
+    "detection_accuracy_pct": 50.0,
+    "recall_on_defects_pct": 45.5,
+    "recall_schema_invisible_pct": 14.3,
+    "false_positive_rate_pct": 0.0,
+    "localization_exact_pct_of_detected": 100.0,
+    "classification_pct_of_detected": 80.0,
+    "n_cases": 12,
+    "n_missing": 0
+  },
+  "per_case": [
+    {
+      "case_id": "01_column_renamed",
+      "composite": 1.0,
+      "detection": true,
+      "localization": true,
+      "classification": true,
+      "loc_jaccard": 1.0,
+      "predicted_type": "column_renamed",
+      "true_type": "column_renamed"
+    },
+    {
+      "case_id": "02_column_dropped",
+      "composite": 1.0,
+      "detection": true,
+      "localization": true,
+      "classification": true,
+      "loc_jaccard": 1.0,
+      "predicted_type": "column_dropped",
+      "true_type": "column_dropped"
+    },
+    {
+      "case_id": "03_column_added",
+      "composite": 1.0,
+      "detection": true,
+      "localization": true,
+      "classification": true,
+      "loc_jaccard": 1.0,
+      "predicted_type": "column_added",
+      "true_type": "column_added"
+    },
+    {
+      "case_id": "04_type_changed",
+      "composite": 1.0,
+      "detection": true,
+      "localization": true,
+      "classification": true,
+      "loc_jaccard": 1.0,
+      "predicted_type": "type_changed",
+      "true_type": "type_changed"
+    },
+    {
+      "case_id": "05_date_format_changed",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "date_format_changed"
+    },
+    {
+      "case_id": "06_null_surge",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "null_surge"
+    },
+    {
+      "case_id": "07_unit_change_currency",
+      "composite": 0.7,
+      "detection": true,
+      "localization": true,
+      "classification": false,
+      "loc_jaccard": 1.0,
+      "predicted_type": "type_changed",
+      "true_type": "unit_change"
+    },
+    {
+      "case_id": "08_enum_value_drift",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "enum_value_drift"
+    },
+    {
+      "case_id": "09_precision_loss",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "precision_loss"
+    },
+    {
+      "case_id": "10_encoding_change",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "encoding_change"
+    },
+    {
+      "case_id": "11_duplicate_rows",
+      "composite": 0.0,
+      "detection": false,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "duplicate_rows"
+    },
+    {
+      "case_id": "12_control_no_defect",
+      "composite": 1.0,
+      "detection": true,
+      "localization": null,
+      "classification": null,
+      "loc_jaccard": null,
+      "predicted_type": "none",
+      "true_type": "none"
+    }
+  ]
+}

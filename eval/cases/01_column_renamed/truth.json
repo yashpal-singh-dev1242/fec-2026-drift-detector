@@ -1,0 +1,11 @@
+{
+  "defect_type": "column_renamed",
+  "affected_columns": [
+    "customer_id"
+  ],
+  "severity": "high",
+  "schema_check_catches": true,
+  "description": "customer_id renamed to cust_id",
+  "case_id": "01_column_renamed",
+  "has_defect": true
+}

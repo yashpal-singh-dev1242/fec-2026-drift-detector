@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "columns missing in day2: ['discount_pct']"
+}

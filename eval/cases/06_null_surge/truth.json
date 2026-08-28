@@ -1,0 +1,11 @@
+{
+  "defect_type": "null_surge",
+  "affected_columns": [
+    "email"
+  ],
+  "severity": "medium",
+  "schema_check_catches": false,
+  "description": "email null rate jumped from ~2% to ~60%",
+  "case_id": "06_null_surge",
+  "has_defect": true
+}
