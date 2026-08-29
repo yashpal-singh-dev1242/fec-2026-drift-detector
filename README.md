@@ -34,9 +34,39 @@ was, how severe it is, and the evidence behind it — for feeds of any size.
 
 ## 2. What the system does
 
-Two daily files go in — yesterday's feed and today's. A drift report comes out:
-whether the feed drifted, which columns are affected, the kind of drift, its
-severity, and the reasoning.
+Two daily files go in — yesterday's feed and today's. A drift report comes
+out: whether the feed drifted, which columns are affected, the kind of drift,
+its severity, and the reasoning.
+
+The agent's verdict is structured JSON, which is the right interface for a
+pipeline but not what lands in an engineer's inbox at 8am. `src/report.py`
+renders it as the alert they would actually act on — what changed, the
+before-and-after statistics, which relationships broke, what it does to
+downstream reporting, and what to do next:
+
+    DRIFT DETECTED - orders_feed  2026-08-29           SEVERITY: HIGH
+
+      WHAT CHANGED
+        unit change affecting amount
+
+      COLUMN STATISTICS
+        amount: type float -> int; mean 2,501.96 -> 211,555.80;
+                whole-number rate 2.0% -> 100.0%
+
+      BROKEN RELATIONSHIPS
+        amount == quantity * unit_price
+          held on 100.0% of rows yesterday, 0.0% today (200 rows sampled)
+
+      DOWNSTREAM IMPACT
+        Every aggregate over this column is wrong by the scale factor.
+        Revenue totals, averages and threshold filters will all be affected.
+
+      RECOMMENDED ACTION
+        Hold today's load. Do not refresh downstream reports.
+        Contact the data provider before reprocessing.
+
+A clean feed produces a short NO DRIFT report listing the relationships that
+were checked and still hold.
 
 The core constraint that shapes everything: **raw rows never enter the model's
 context.** Two deterministic tools compress the files into evidence, and the
@@ -270,6 +300,11 @@ Full instructions: [`REPRODUCTION.md`](REPRODUCTION.md)
 ```bash
 bash run.sh verify          # reproduces every number above. Docker only, $0.00
 ./run.sh agent-v2 S         # live agent run (needs Claude Code, ~$1)
+
+# render any verdict as the report a data engineer would receive
+docker run --rm -v "$PWD://app" -w //app drift python -m src.report \
+  preds/agentv2_S/07_unit_change_currency.json \
+  --profiles _profiles/S/07_unit_change_currency --feed orders_feed
 ```
 
 The verification path needs no API key and no subscription.
