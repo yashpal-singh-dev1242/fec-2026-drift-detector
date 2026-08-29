@@ -1,0 +1,7 @@
+{
+  "has_defect": true,
+  "affected_columns": [],
+  "defect_type": "duplicate_rows",
+  "severity": "high",
+  "explanation": "Today's file jumped from 50,000 to 57,500 rows, and the profiler reports duplicate_rows = 7,500 (duplicate_rate 13.04%) versus 0 / 0.0% yesterday. The excess row count (57,500 - 50,000 = 7,500) exactly matches the reported duplicate count, indicating ~7,500 fully duplicated rows were appended/merged into the feed. Every per-column profile is otherwise stable: same 10 columns and order, same dtypes, same decimal_places, same date format (YYYY-MM-DD x N), same status vocabulary (4 values), same quantity/discount_pct domains, negligible email null drift (1.91% -> 2.05%), and both cross-column invariants (amount == quantity*unit_price; email token from customer_name) still hold at 1.0. Min/max wiggles on unit_price and amount are trivial sampling noise, and the order_id range shift (1000-50999 -> 101000-150999) is normal identifier movement. The duplication is the sole contract break: downstream aggregates (row counts, revenue sums, per-customer/per-status totals, averages weighted by row) will be inflated by ~13% and distinct-entity metrics distorted, even though the file loads and parses cleanly."
+}

@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "The order_id column changed from integer (dtype \"int\", samples \"1000\"..\"1004\", length 4-5, with numeric min/max stats) to string (dtype \"str\", samples \"ORD-101000\"..\"ORD-101004\", fixed length 10, numeric stats absent). The identifier is now a zero-padded string with an \"ORD-\" prefix instead of a bare integer. The file still parses, but any downstream join, lookup, dedup, or numeric cast keyed on order_id against historical integer keys will silently fail to match. This is distinct from normal day-over-day ID range shifts — the type and lexical format of the key changed. All other columns are stable: same schema and column order, order_date format unchanged (YYYY-MM-DD), status vocabulary unchanged, unit_price/amount/quantity/discount_pct means/ranges/decimal precision/zero-fractions unchanged, email null rate essentially flat (2.05% -> 1.95%), no duplicate rows, and both discovered cross-column invariants still hold at 100%. Byte growth is explained by the longer order_id strings."
+}

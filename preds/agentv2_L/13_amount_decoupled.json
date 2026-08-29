@@ -1,0 +1,11 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount",
+    "quantity",
+    "unit_price"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "high",
+  "explanation": "The invariant amount == quantity * unit_price held on 100% of yesterday's sampled rows but 0% of today's — it fails on every row, not just some. Meanwhile the individual column profiles for amount, quantity, and unit_price are all essentially unchanged day-over-day (amount mean 2258.85 -> 2262.49, min/max and 2-decimal precision intact; quantity mean 5.00 -> 4.99; unit_price mean 452.18 -> 452.74). Aggregate reconciliation still roughly works (mean(quantity)*mean(unit_price) ~= 2259.6 vs mean(amount) 2262.5), so totals look fine at a glance. This means the per-row line-item total is now computed by a different formula (e.g., added tax/shipping/fee, different rounding, or discount applied differently) even though marginal distributions are preserved. Because every per-column profile looks normal and only the relationship changed, the root cause is a broken cross-column invariant rather than a unit change or precision loss. The order_id range shift (1000-50999 -> 101000-150999) is a normal identifier-range difference and not drift. Downstream analytics that recompute or validate revenue from units x price will silently disagree with the amount column on every row."
+}

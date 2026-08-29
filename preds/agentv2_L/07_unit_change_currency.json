@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "unit_change",
+  "severity": "high",
+  "explanation": "The `amount` column changed from dollars stored as float with 2 decimal places (min 5.28, max 8099.55, mean 2256.05) to integer cents (dtype int, 0 decimal places, min 514, max 809901, mean 226101.01). Every summary statistic scaled by ~100 and the fractional component was dropped. This is corroborated by the cross-column invariant `amount == quantity * unit_price`, which held at 1.0 yesterday and 0.0 today: for a today sample row, unit_price=417.38, quantity=2, amount=83476, and 417.38*2*100 = 83476, i.e. amount is now quantity*unit_price expressed in integer cents. All other columns (quantity, unit_price, discount_pct, order_date, status, email, customer_name) are statistically stable; the order_id range shift is normal identifier drift. Downstream revenue aggregations will be inflated 100x while the file still parses cleanly."
+}

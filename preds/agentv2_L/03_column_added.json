@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "promo_code"
+  ],
+  "defect_type": "column_added",
+  "severity": "low",
+  "explanation": "Today's file has 11 columns vs. yesterday's 10: a new trailing column `promo_code` was added (values SAVE10/FREESHIP, ~50% null). All 10 pre-existing columns are unchanged in name, order, dtype, decimal places, null rates, value vocabularies, and distributions; both discovered cross-column invariants (amount == quantity*unit_price; email token from customer_name) still hold. The order_id range shift (1000–50999 → 101000–150999) is normal identifier movement. Byte growth (+284 KB) is fully accounted for by the wider order_id values plus the new column, so there is no encoding bloat. The 50% null rate on promo_code is not a null surge because the column has no prior-day baseline. Downstream risk: named-column consumers are fine, but positional parsers or schema-pinned loads expecting exactly 10 columns will misalign or fail."
+}

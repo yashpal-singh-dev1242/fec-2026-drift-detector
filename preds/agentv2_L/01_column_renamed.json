@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id",
+    "cust_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "The column carrying customer identifiers was renamed from `customer_id` (day1) to `cust_id` (day2). The data is otherwise identical in shape: both are 6-character `C#####` strings, null_rate 0.0, distinct_approx 20000 (capped), with matching low-count collision structure in top_values. No other column shows drift: order_id's 1000–50999 → 101000–150999 shift is a normal identifier-range change (and explains the length 4–5 → 6 and the small byte-size increase); discount_pct/status differences are just sample-row ordering (distinct counts, min/max, and means are stable); unit_price min 5.00→5.05 and amount max 8096→8099 are sampling noise with decimal_places unchanged at {2:50000}; email null rate 1.98%→2.03% is stable; both cross-column invariants still hold at 1.0. Downstream code that joins or groups by `customer_id` will error or silently produce all-null customer keys."
+}

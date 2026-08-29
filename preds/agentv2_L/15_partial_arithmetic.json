@@ -1,0 +1,11 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount",
+    "quantity",
+    "unit_price"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "high",
+  "explanation": "Yesterday amount == quantity * unit_price held on 300/300 sampled rows; today it holds on only ~93%, so ~7% of rows have an amount that no longer matches the product. The per-column profiles support inflation rather than noise or rounding: amount.max jumped from 8099.10 to 8758.61, but the largest possible product today is 9 * 899.92 = 8099.28, so some amount values are now physically impossible under the old contract. All three columns are otherwise individually normal (quantity mean 4.997->4.993, unit_price mean 452.1->451.3 at 2 dp, amount mean 2257->2261 at 2 dp; no type change, null surge, unit shift, or precision loss on any single column). The upward direction rules out discount_pct finally being applied; it looks like an added tax/surcharge/fee on a subset of rows. Because each column looks plausible in isolation and only the relationship changed, the root cause is a broken cross-column invariant. Downstream revenue/GMV/margin analytics will be silently overstated for ~7% of orders even though the file parses cleanly. Note: order_id range/width change is normal identifier drift, and discount_pct's all-zero samples today are sample-position luck (mean/max/distinct unchanged)."
+}

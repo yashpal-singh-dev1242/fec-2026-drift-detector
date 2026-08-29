@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match day-over-day on dtype, null rate, decimal places, value vocabulary, date format (YYYY-MM-DD x50000 both days), string lengths, and distribution means/ranges. Both discovered invariants (amount == quantity*unit_price; email token from customer_name) hold at 100% on today's sample. The only notable changes are identifier movement: order_id shifted from 1000-50999 to 101000-150999 (and widened 4-5 to 6 chars) and customer_id samples differ - both explicitly normal per the rules. The ~1.4% file-size increase is fully accounted for by the wider order_id values. No renamed/dropped/added columns, no type or unit changes, no precision loss, no null surge, no encoding corruption, no duplicate rows."
+}

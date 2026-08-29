@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match yesterday's contract: identical names/order, dtypes, decimal-place distributions, value vocabularies (status, discount_pct), date format (YYYY-MM-DD x50000), length ranges, and null rates (email 1.88%->1.97% is noise). Numeric magnitudes/means are stable (unit_price 452->451, amount 2261->2248). Both discovered invariants (amount == quantity*unit_price; email token from customer_name) still hold 300/300. The only large change is order_id shifting from the 1000-50999 range to 101000-150999 (and its length/mean), which is a normal day-over-day identifier range advance and explicitly not drift."
+}

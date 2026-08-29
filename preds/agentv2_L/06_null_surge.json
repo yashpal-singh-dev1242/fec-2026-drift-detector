@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "email"
+  ],
+  "defect_type": "null_surge",
+  "severity": "high",
+  "explanation": "The email column's null_rate rose from 0.0205 (2.1%) yesterday to 0.6054 (60.5%) today — a ~29x increase, meaning roughly 29,000 additional rows now have no email. This is corroborated by the file shrinking ~485 KB (4,258,198 -> 3,773,107 bytes), consistent with dropping ~29k email strings. The non-null emails remain well-formed: distinct_approx (1584), length band (16-20), and the discovered invariant \"email contains a token from customer_name\" all hold at 1.0, so this is pure missingness, not encoding or format corruption. Every other column is stable: order_id's range shift (1000-50999 -> 101000-150999) is normal identifier drift; unit_price/amount min-max wiggle is sampling noise with decimal_places unchanged at 2 (no precision loss); status keeps the same 4-value vocabulary; quantity/discount_pct/customer_name unchanged; schema (10 cols, order, dtypes) identical; both arithmetic and referential invariants hold. Downstream email-keyed joins, dedup, and per-customer aggregations would silently lose 60% of rows while the file still loads cleanly. Rated high rather than critical because the schema and all non-null values are intact."
+}

@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "unit_price",
+    "amount"
+  ],
+  "defect_type": "precision_loss",
+  "severity": "high",
+  "explanation": "Both monetary columns lost sub-unit precision: values are now rounded to whole currency units despite still being formatted with two decimals. Evidence: unit_price samples went from 260.04/645.21 to 665.00/833.00/47.00; amount samples from 1300.20/5806.89 to 4652.00/1665.00; zero_fraction_rate for both jumped to exactly 1.0 (from 0.0105 and 0.0233); distinct_approx collapsed from 20000 (capped) to 896 for unit_price and to 7303 for amount. The arithmetic invariant amount == quantity * unit_price dropped from 100% to 32.7% hold rate because unit_price and amount were each rounded independently, so quantity*round(unit_price) != round(quantity*unit_price); this broken invariant is a symptom of the precision loss, not a separate defect. Column count, order, types, date format, status vocabulary, and null rates are otherwise stable (order_id range shift is normal identifier drift). Impact: revenue/margin aggregates still look plausible but per-row reconciliation and unit economics are corrupted."
+}

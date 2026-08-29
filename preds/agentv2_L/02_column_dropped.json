@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "The 'discount_pct' column present in day1.csv (float, one decimal place, value vocabulary {0.0, 5.0, 10.0, 15.0}, mean 4.984, no nulls) is entirely absent from day2.csv. Column count drops from 10 to 9 (n_columns 10 -> 9) and the file shrinks by ~158 KB (~3 bytes/row), consistent with removing a short numeric field across 50,000 rows. All remaining columns show only normal day-over-day variation: order_id/customer_id ranges shifted (identifier ranges, not drift), unit_price and amount means/precision stable (still 2 dp), email null rate essentially unchanged (0.0195 -> 0.0193), status keeps the same 4-value vocabulary, and both discovered invariants still hold at 1.0. Notably amount == quantity * unit_price held at 1.0 in day1 as well, so discount_pct never influenced amount; arithmetic pipelines are unaffected, but any downstream analytics that reads, aggregates, or joins on discount_pct will silently lose that data or error on the missing field."
+}

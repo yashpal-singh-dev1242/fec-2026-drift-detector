@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "status"
+  ],
+  "defect_type": "enum_value_drift",
+  "severity": "high",
+  "explanation": "The `status` categorical vocabulary changed case: yesterday's values were lowercase (pending, delivered, shipped, cancelled) and today's are uppercase (PENDING, DELIVERED, SHIPPED, CANCELLED). Distinct count (4), per-bucket counts (~12.5k each), and length_min_max ([7,9]) are all unchanged because the tokens are identical apart from casing — confirmed by the samples and top_values. The file still loads and parses, but any downstream filter, join, CASE expression, or dashboard keyed on the old lowercase literals will silently match zero rows or drop the category. All other columns are clean: order_id's range shift (1000–50999 → 101000–150999) is normal identifier movement; quantity/unit_price/amount/discount_pct retain their ranges, means, decimal precision (2 dp), and zero-fractions; order_date is still YYYY-MM-DD; email null rate moved trivially (1.96% → 2.05%); no schema changes; no duplicates; and both cross-column invariants (amount == quantity*unit_price, email-contains-name-token) still hold at 1.0."
+}
