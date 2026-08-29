@@ -84,7 +84,7 @@ def main():
         f = lambda v: "-" if v is None else ("Y" if v else "n")
         print(f"{r['case_id']:<26}{r['composite']:>6}{f(r.get('detection')):>6}"
               f"{f(r.get('localization')):>6}{f(r.get('classification')):>6}  "
-              f"{str(r.get('predicted_type')):<22}{r.get('true_type','')}"
+              f"{str(r.get('predicted_type'))[:30]:<32}{r.get('true_type','')}"
               + (f"  [{r['note']}]" if r.get("note") else ""))
     print("\n--- summary ---")
     for k, v in summary.items():
