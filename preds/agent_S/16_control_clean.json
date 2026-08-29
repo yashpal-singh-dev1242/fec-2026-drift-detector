@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match across the two days on schema, order, dtype, null rate, decimal precision, date format, value vocabulary, and magnitude. status and discount_pct keep the same value sets (only distribution reshuffles, which is normal). The cross-column invariant amount = quantity × unit_price holds exactly on all sampled rows both days, and email local-parts still match customer first names. Identifier range shifts (order_id 1000s→2000s, new customer_ids) and small mean movements in quantity/unit_price/amount are normal day-over-day variation, not drift. No renamed/dropped/added columns, no encoding corruption, no duplicate surge, no null surge."
+}

@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "unit_price",
+    "amount"
+  ],
+  "defect_type": "precision_loss",
+  "severity": "high",
+  "explanation": "Yesterday `unit_price` and `amount` carried genuine cent-level precision: sample values like 260.04, 645.21, 895.81 and 1300.20, 5806.89, 1298.44, with `zero_fraction_rate` of 0.01 and 0.015 respectively (i.e. almost every row had a non-zero fractional part). Today every sampled value is a whole number rendered with a trailing \".00\" (352.00, 261.00, 76.00, 704.00; 2113.00, 783.00, 306.00, 5635.00), and `zero_fraction_rate` jumps to 1.0 for both columns. The `decimal_places` profile still shows \"2\" only because the formatting string is unchanged — the actual cents have been rounded/truncated away. Corroborating signs: `unit_price` min 12.08→10.0 and max 899.36→899.0, `amount` min 35.28→10.0 and max 7880.94→7875.0, and `distinct_approx` drops (200→181 for unit_price, 200→198 for amount) as rounding collapses formerly distinct values.\n\nThis is also the root cause of the broken cross-column invariant `amount == quantity * unit_price` (hold rate 1.0→0.295): both operands and the product were independently rounded to whole units, so the exact arithmetic identity no longer holds. The per-column arithmetic (unit_price and amount rounding) is the specific defect, not a standalone invariant break. Downstream impact: revenue/GMV totals, average-order-value, margin, and any reconciliation of line items against order totals will be silently off by up to ~0.5 per unit price and several currency units per order. Other columns (order_date format, status vocabulary, quantity, discount_pct, email null rate, row/column counts) are unchanged."
+}

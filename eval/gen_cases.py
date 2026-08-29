@@ -146,6 +146,55 @@ def d_none(rows, cols, rng):
         schema_check_catches=False,
         description="no drift; normal day-over-day variation only")
 
+
+# --- adversarial: cross-column invariants broken, marginals preserved ---
+# The base feed satisfies two invariants:
+#   amount == quantity * unit_price          (arithmetic)
+#   email prefix == first name, lowercased   (referential)
+# These defects break a relationship while leaving per-column statistics
+# indistinguishable from natural day-over-day variation.
+
+def d_amount_decoupled(rows, cols, rng):
+    vals = [r["amount"] for r in rows]
+    rng.shuffle(vals)
+    for r, v in zip(rows, vals):
+        r["amount"] = v
+    return rows, cols, dict(defect_type="cross_column_invariant_broken",
+        affected_columns=["amount", "quantity", "unit_price"], severity="critical",
+        schema_check_catches=False, marginals_preserved=True,
+        description="amount no longer equals quantity*unit_price; amount column "
+                    "shuffled so its distribution is unchanged")
+
+
+def d_email_name_mismatch(rows, cols, rng):
+    vals = [r["email"] for r in rows]
+    rng.shuffle(vals)
+    for r, v in zip(rows, vals):
+        r["email"] = v
+    return rows, cols, dict(defect_type="cross_column_invariant_broken",
+        affected_columns=["email", "customer_name"], severity="high",
+        schema_check_catches=False, marginals_preserved=True,
+        description="email no longer corresponds to customer_name; email column "
+                    "shuffled so null rate and value set are unchanged")
+
+
+def d_partial_arithmetic(rows, cols, rng):
+    idx = rng.sample(range(len(rows)), max(1, int(len(rows) * 0.08)))
+    for i in idx:
+        r = rows[i]
+        r["amount"] = f"{round(float(r['amount']) * rng.uniform(1.02, 1.09), 2):.2f}"
+    return rows, cols, dict(defect_type="cross_column_invariant_broken",
+        affected_columns=["amount", "quantity", "unit_price"], severity="high",
+        schema_check_catches=False, marginals_preserved=True,
+        description="8% of rows have amount inconsistent with quantity*unit_price "
+                    "(stale price table); marginal distribution barely moves")
+
+
+def d_none2(rows, cols, rng):
+    return rows, cols, dict(defect_type="none", affected_columns=[],
+        severity="none", schema_check_catches=False, marginals_preserved=True,
+        description="second clean control on the extended set")
+
 CASES = [
     ("01_column_renamed", d_rename), ("02_column_dropped", d_drop),
     ("03_column_added", d_add), ("04_type_changed", d_type),
@@ -153,6 +202,10 @@ CASES = [
     ("07_unit_change_currency", d_units), ("08_enum_value_drift", d_enum),
     ("09_precision_loss", d_precision), ("10_encoding_change", d_encoding),
     ("11_duplicate_rows", d_dupes), ("12_control_no_defect", d_none),
+    ("13_amount_decoupled", d_amount_decoupled),
+    ("14_email_name_mismatch", d_email_name_mismatch),
+    ("15_partial_arithmetic", d_partial_arithmetic),
+    ("16_control_clean", d_none2),
 ]
 
 def main():

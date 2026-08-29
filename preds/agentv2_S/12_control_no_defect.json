@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match day-over-day on name, order, dtype, null rate, decimal places, length ranges, and value vocabulary. order_date stays YYYY-MM-DD (200/200) both days. unit_price (mean 457→450), amount (mean 2208→2262), quantity (mean 4.6→5.1), discount_pct (vocab {0,5,10,15}), and status (same 4 labels, only distribution reshuffled) all move within normal ranges. email null rate is 0.015 both days. No duplicate-row inflation (0.0 both). Identifier ranges shifting (order_id 1000s→2000s, new customer_id/email values) is expected and not drift. Both discovered invariants — amount == quantity*unit_price and email-contains-customer_name-token — hold at rate 1.0 on today's sample, and the per-column profiles are consistent, so no cross-column invariant is broken. This is a clean feed."
+}

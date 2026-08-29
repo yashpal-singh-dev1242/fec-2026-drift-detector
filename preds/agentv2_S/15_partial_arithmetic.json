@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "medium",
+  "explanation": "The arithmetic invariant amount == quantity * unit_price held on 100% of yesterday's rows but only 92% of today's (16 of 200 rows broken). The per-column profiles for the three columns involved all look normal: quantity range 1-9 unchanged, unit_price still 2-decimal floats with a plausible mean shift (481.73 -> 437.05), amount still 2-decimal floats with a plausible mean shift (2456.27 -> 2202.94), no null surge, no dtype change, no magnitude/unit shift (min/max ranges comparable), decimal_places still {\"2\": 200} for both unit_price and amount so no precision loss. Aggregate consistency roughly holds (mean qty * mean unit_price ~ mean amount in both files), so this is not a global unit or scale change — only a ~8% subset of rows has amount decoupled from quantity * unit_price. Because the individual columns are clean and the relationship is the only thing that changed, the root cause is a broken cross-column invariant (e.g. amount now computed by a different rule — possibly applying discount_pct, or a stale/overwritten amount field — on a fraction of records). Downstream revenue reconciliation, margin, and line-item checks would silently be wrong on those rows. Not classified as unit_change or precision_loss since neither column's distribution or formatting shifted in a way that explains it."
+}

@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "promo_code"
+  ],
+  "defect_type": "column_added",
+  "severity": "low",
+  "explanation": "Today's file has 11 columns vs yesterday's 10. A new trailing column `promo_code` (str, distinct≈2: \"SAVE10\"/\"FREESHIP\", null_rate 0.47) has appeared. All 10 pre-existing columns are structurally stable: same names, order, dtypes, formats (order_date still YYYY-MM-DD x200), decimal precision (unit_price/amount still 2dp x200), null rates (email 0.025→0.02), and value vocabularies (status still the same 4 tokens; discount_pct still {0,5,10,15}). Both discovered invariants still hold at 1.0 (amount == quantity*unit_price; email token ⊂ customer_name). Shifts in means (unit_price 482→431, amount 2424→2051) and in zero_fraction/dup-customer counts are within normal day-over-day sampling noise and identifier ranges rolling forward (1000s→2000s) is expected. The only contract change is the added column, which will break schema-strict loaders / positional mappings and needs a downstream schema update, but it does not corrupt existing fields — hence low severity. Its 47% null rate is inherent to a sparsely-populated promo field, not a null surge."
+}

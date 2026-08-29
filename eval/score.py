@@ -4,7 +4,7 @@ from pathlib import Path
 
 VOCAB = ["column_renamed", "column_dropped", "column_added", "type_changed",
          "date_format_changed", "null_surge", "unit_change", "enum_value_drift",
-         "precision_loss", "encoding_change", "duplicate_rows", "none"]
+         "precision_loss", "encoding_change", "duplicate_rows", "cross_column_invariant_broken", "none"]
 CASES_DIR = Path("eval/cases")
 
 def load_truth():

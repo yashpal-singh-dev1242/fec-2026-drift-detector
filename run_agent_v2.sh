@@ -2,7 +2,7 @@
 # Usage: ./run_agent.sh <SCALE> <LABEL> [case_id ...]
 # Profiles each case in Docker, then asks the agent to diagnose from profiles only.
 set -u
-SCALE="${1:-S}"; LABEL="${2:-agent_${SCALE}}"; shift 2 || true
+SCALE="${1:-S}"; LABEL="${2:-agentv2_${SCALE}}"; shift 2 || true
 CASES_DIR="eval/cases"; [ "$SCALE" != "S" ] && CASES_DIR="eval/cases_${SCALE}"
 PRED="preds/${LABEL}"; PROF="_profiles/${SCALE}"
 mkdir -p "$PRED" "$PROF" _raw
@@ -18,7 +18,8 @@ for C in $LIST; do
   mkdir -p "$PROF/$C"
   docker run --rm -v "//c/Users/yashp/projects/fec-2026://app" -w //app drift sh -c "
     python -m src.tools.profile $CASES_DIR/$C/day1.csv > $PROF/$C/day1.json
-    python -m src.tools.profile $CASES_DIR/$C/day2.csv > $PROF/$C/day2.json" || { echo "PROFILE FAIL"; continue; }
+    python -m src.tools.profile $CASES_DIR/$C/day2.csv > $PROF/$C/day2.json
+    python -m src.tools.invariants $CASES_DIR/$C/day1.csv $CASES_DIR/$C/day2.csv > $PROF/$C/invariants.json" || { echo "PROFILE FAIL"; continue; }
   {
     echo "You are auditing a daily data feed for silent contract drift."
     echo "You are given STATISTICAL PROFILES of yesterday's and today's files."
@@ -33,6 +34,15 @@ for C in $LIST; do
     echo "=== PROFILE: YESTERDAY ==="; cat "$PROF/$C/day1.json"
     echo ""
     echo "=== PROFILE: TODAY ==="; cat "$PROF/$C/day2.json"
+    echo ""
+    echo "=== CROSS-COLUMN INVARIANT CHECK ==="
+    echo "Relationships that held in yesterday's file, re-tested on a random"
+    echo "sample of today's rows. A BROKEN invariant is often a SYMPTOM of a"
+    echo "more specific defect (a unit change or precision loss also breaks"
+    echo "arithmetic). Classify by ROOT CAUSE: only use"
+    echo "cross_column_invariant_broken when the per-column profiles look"
+    echo "normal and the relationship is the only thing that changed."
+    cat "$PROF/$C/invariants.json"
   } | claude -p --output-format json --json-schema "$SCHEMA" --model sonnet \
       --disallowedTools "Bash Read Write Edit Glob Grep WebSearch WebFetch Task" \
       > "_raw/${LABEL}_$C.json" 2>&1

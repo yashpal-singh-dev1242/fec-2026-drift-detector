@@ -1,0 +1,11 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount",
+    "quantity",
+    "unit_price"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "high",
+  "explanation": "The invariant amount == quantity * unit_price held on 100% of yesterday's rows but only 1.5% of today's (3/200, i.e. essentially random coincidence). This is a root-cause cross-column break, not a symptom of another defect: all per-column profiles for amount, quantity, and unit_price are normal. amount is still float with 2 decimal places on all 200 rows, 0 nulls, no duplicate rows, and its marginal distribution is still entirely consistent with being a set of quantity*unit_price products (today's min 10.39 = 1 x min unit_price 10.39; max 7671.69 < 9 x 897.57; mean 2163.6 ~= mean(qty) 4.935 x mean(price) 444.9). quantity and unit_price distributions are unchanged. So there is no unit change, no precision loss, no null surge, no type change, no row duplication — the amount values are plausible but no longer aligned to the quantity and unit_price on their own row. Downstream per-order revenue, margin, discount, and reconciliation analytics that recompute or trust amount will be silently corrupted even though the file parses cleanly. The other discovered invariant (email contains a customer_name token) still holds at 100%, and the remaining column changes (identifier ranges shifting 1xxx->2xxx, email null_rate improving 0.04->0.005, status top-value reordering, unit_price zero_fraction 0.01->0.005) are normal day-over-day variation."
+}

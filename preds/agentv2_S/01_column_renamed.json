@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id",
+    "cust_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "The customer identifier column was renamed from `customer_id` (yesterday) to `cust_id` (today). The value contract is otherwise identical: both are strings matching `C` + 5 digits, 6 characters long, null_rate 0.0, 200 distinct values (fully unique). The change is purely at the header level. Downstream analytics selecting or joining on `customer_id` will either error on the missing column or silently yield all-NULL customer keys (and drop the unrecognized `cust_id`), breaking every customer-level join and aggregation even though the CSV still loads and parses. All other columns are consistent: order_date format unchanged (YYYY-MM-DD, 200/200), status keeps the same 4-value vocabulary, quantity/discount_pct unchanged, unit_price and amount show only mild sampling variation with decimal_places still {2:200} and the amount==quantity*unit_price invariant holding at 1.0, email null_rate improved (0.015→0.005), and order_id's range shift is normal identifier advancement. No null surge, encoding corruption, duplication, or type change elsewhere."
+}

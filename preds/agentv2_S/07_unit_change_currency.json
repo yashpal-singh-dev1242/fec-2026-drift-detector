@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "unit_change",
+  "severity": "high",
+  "explanation": "The `amount` column changed from dollars (float, exactly 2 decimal places, mean 2501.96, range 40.63–7902.81) to integer cents (int, 0 decimal places, mean 211555.8, range 4632–798858) — a consistent ×100 magnitude and representation change. Sample rows confirm it: unit_price 700.10 × qty 1 → amount 70010; unit_price 41.48 × qty 3 → amount 12444. The reference invariant `amount == quantity * unit_price` held at 100% yesterday and 0% today because unit_price is still in dollars while amount is now in cents. This is the root cause; the broken arithmetic invariant is only a symptom. No precision is lost (cents are exact integers), so this is a unit/magnitude change rather than precision loss or a pure type change. Downstream revenue sums/averages on `amount` are inflated 100× and any reconciliation against quantity×unit_price fails on every row. Other differences (identifier ranges, quantity/unit_price means, minor null-rate shifts) are normal day-over-day variation."
+}

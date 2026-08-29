@@ -1,0 +1,12 @@
+{
+  "defect_type": "none",
+  "affected_columns": [],
+  "severity": "none",
+  "schema_check_catches": false,
+  "marginals_preserved": true,
+  "description": "second clean control on the extended set",
+  "case_id": "16_control_clean",
+  "has_defect": false,
+  "scale": "S",
+  "rows": 200
+}

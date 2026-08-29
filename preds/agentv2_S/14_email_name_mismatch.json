@@ -1,0 +1,10 @@
+{
+  "defect_type": "cross_column_invariant_broken",
+  "has_defect": true,
+  "affected_columns": [
+    "email",
+    "customer_name"
+  ],
+  "severity": "medium",
+  "explanation": "The only material change is the referential invariant \"email contains a token from customer_name,\" which held for 100% of yesterday's rows and holds for only ~9.6% today (roughly chance level for shared common first names). Every other signal is clean: schema, column order, row count, dtypes, date format (YYYY-MM-DD x200 both days), status vocabulary (same 4 values), quantity/discount_pct distributions, and the arithmetic invariant amount == quantity * unit_price (still 100%). Per-column profiles for email and customer_name individually look normal — email is still `name##@example.com` with similar length range (16-20 vs 17-20) and even a slightly lower null rate (0.015 vs 0.025); customer_name still shows plausible \"First Last\" values with a comparable distinct count (131 vs 115). The samples make the decoupling visible: today's row 1 pairs customer_name \"Vikram Reddy\" with email \"zara85@example.com,\" and row 5 pairs \"Priya Das\" with \"tara82@example.com.\" So the root cause is not a unit change, precision loss, or per-column corruption — the email column has been regenerated/shuffled independently of customer_name, breaking the identity linkage. Downstream impact: customer de-duplication, identity resolution, and any name-personalized email sends will be corrupted even though the file loads fine. Not classified as null_surge (nulls actually dropped) or column_added/renamed (schema identical). Day-over-day identifier range shifts (order_id 1000s->2000s, new customer_id values) are expected and ignored."
+}

@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match in name, order, dtype, and decimal precision. 200 rows, 0 duplicates both days. order_date stays YYYY-MM-DD; status keeps the same 4-value vocabulary; discount_pct keeps {0,5,10,15}. Numeric magnitudes move only within sampling noise (unit_price mean 435→460, amount mean 2259→2326, ~5-6% for n=200 with high variance). email null_rate actually falls (2.5%→1.5%), so no null surge. The cross-column invariant amount = quantity * unit_price holds exactly on all sampled rows for BOTH days, and discount_pct is excluded from amount in both — consistent, no decoupling. No encoding artifacts in samples. This is a clean control feed with no contract drift."
+}

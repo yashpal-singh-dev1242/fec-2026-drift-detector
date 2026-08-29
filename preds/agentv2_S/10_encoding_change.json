@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_name"
+  ],
+  "defect_type": "encoding_change",
+  "severity": "high",
+  "explanation": "Today's customer_name column shows classic mojibake: a new non_ascii_rate of 0.305 (0 yesterday) and a sample value \"OmÃ¡r VermÃ¡\" — UTF-8-encoded accented characters (\"Omár Vermá\") re-decoded as Latin-1/CP-1252, so each accented char becomes a Ã-prefixed pair. Character-length max rose 13→17 and file size grew 17008→17291 bytes with identical row/column counts, both consistent with multi-byte expansion. The BROKEN cross-column invariant (\"email contains a token from customer_name\", hold rate 1.0→0.88) is a symptom of this: the email column is still clean lowercase ASCII, but \"OmÃ¡r\" no longer contains the token \"omar\". Other movements (id ranges, discount_pct mean 5.0→4.05 with same value set, email nulls 1.5%→3%, unit_price/amount min-max wobble with the arithmetic invariant still holding) are normal variation, not drift. Downstream name joins, dedup, and grouping are corrupted for ~30% of rows."
+}

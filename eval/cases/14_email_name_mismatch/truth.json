@@ -1,0 +1,15 @@
+{
+  "defect_type": "cross_column_invariant_broken",
+  "affected_columns": [
+    "email",
+    "customer_name"
+  ],
+  "severity": "high",
+  "schema_check_catches": false,
+  "marginals_preserved": true,
+  "description": "email no longer corresponds to customer_name; email column shuffled so null rate and value set are unchanged",
+  "case_id": "14_email_name_mismatch",
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
+}

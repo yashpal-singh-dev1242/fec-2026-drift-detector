@@ -82,5 +82,33 @@
     "defect_type": "none",
     "severity": "none",
     "schema_check_catches": false
+  },
+  {
+    "case_id": "13_amount_decoupled",
+    "has_defect": true,
+    "defect_type": "cross_column_invariant_broken",
+    "severity": "critical",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "14_email_name_mismatch",
+    "has_defect": true,
+    "defect_type": "cross_column_invariant_broken",
+    "severity": "high",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "15_partial_arithmetic",
+    "has_defect": true,
+    "defect_type": "cross_column_invariant_broken",
+    "severity": "high",
+    "schema_check_catches": false
+  },
+  {
+    "case_id": "16_control_clean",
+    "has_defect": false,
+    "defect_type": "none",
+    "severity": "none",
+    "schema_check_catches": false
   }
 ]

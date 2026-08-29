@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "status"
+  ],
+  "defect_type": "enum_value_drift",
+  "severity": "high",
+  "explanation": "The `status` column's value vocabulary changed from lowercase (pending, delivered, shipped, cancelled) to UPPERCASE (PENDING, DELIVERED, SHIPPED, CANCELLED). The category set, distinct count (4), string lengths ([7,9]), and approximate frequencies are otherwise unchanged, confirming this is a pure casing change rather than a genuine distribution shift. The file still parses and cross-column invariants still hold, but downstream case-sensitive filters, joins to status lookup tables, and GROUP BY aggregations will silently mis-bucket or drop every row. No other drift: schema, dtypes, date format, decimal precision, and null rates are stable; identifier range shifts (1000s→2000s order_ids, new customer_ids) are normal daily movement; email null_rate actually improved (0.03→0.015); amount/unit_price mean changes are within ordinary day-over-day variation with unchanged decimal places and the arithmetic invariant intact."
+}

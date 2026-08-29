@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match day-over-day in name, order, dtype, and semantics. order_date is YYYY-MM-DD ×200 both days; status keeps the same 4-value vocabulary ({delivered, pending, cancelled, shipped}) with only frequency reshuffling; discount_pct keeps 4 distinct values over range 0-15 at 1 decimal place. Decimal places are unchanged for every numeric column (unit_price 2, amount 2, discount_pct 1), so no precision loss. No null surge (email null_rate actually falls 0.015 to 0.010; all others 0.0). Zero duplicate rows both days. order_id/customer_id range shifts are normal identifier movement. The ~10% drop in unit_price and amount means moves together with quantity and is within sampling noise for n=200; there is no scaling signature since unit_price max is nearly identical (895.66 to 892.53). The amount ≈ quantity × unit_price invariant holds exactly at the minima both days (16.55×3=49.65; 10.95×2=21.90). This is a clean feed."
+}

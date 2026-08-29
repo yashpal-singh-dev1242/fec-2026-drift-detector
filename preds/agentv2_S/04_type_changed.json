@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "order_id changed from an integer column (dtype int, values 1000-1199, length 4, numeric stats present) to a string column (dtype str, values like 'ORD-2000', length 8, numeric stats gone). The identifier gained an 'ORD-' prefix and is no longer numeric. This is a representation/type change on the primary key, distinct from a benign day-over-day ID range shift. Downstream joins against historical integer order_ids will silently return no matches, integer casts will fail or null out, and sort/dedup semantics change. Other columns are within normal variation: status mix shift and email null_rate 1.5%->3% are minor; the amount == quantity * unit_price invariant still holds and decimal precision is unchanged."
+}

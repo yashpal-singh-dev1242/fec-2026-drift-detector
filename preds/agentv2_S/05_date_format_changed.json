@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_date"
+  ],
+  "defect_type": "date_format_changed",
+  "severity": "high",
+  "explanation": "order_date switched from ISO format YYYY-MM-DD (200/200 yesterday, e.g. 2026-08-07) to slash-delimited day-first DD/MM/YYYY (200/200 today, e.g. 20/08/2026, 06/08/2026). String length stays 10, null_rate 0.0, and distinct count (27) is unchanged, so the file still loads and the column still profiles as a date — a silent contract break. Downstream ISO parsers will null out or reject these values, and lenient parsers may misread day-first dates as month-first (the profiler explicitly flags DD/MM vs MM/DD ambiguity), corrupting all date filtering and time-series aggregation. All other columns are stable: dtypes, numeric ranges, decimal places, string lengths, and the status vocabulary are unchanged; amount == quantity*unit_price still holds at 1.0; the email/customer_name invariant holds; email null_rate actually dropped (0.035 to 0.015); and order_id/customer_id range shifts are normal day-over-day identifier movement."
+}

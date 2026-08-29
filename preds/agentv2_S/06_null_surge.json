@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "email"
+  ],
+  "defect_type": "null_surge",
+  "severity": "high",
+  "explanation": "The email column's null_rate jumped from 0.035 yesterday to 0.58 today, a ~16x increase, with distinct_approx collapsing from 181 to 82 as a direct consequence of fewer non-null values. The emails still present remain valid (the email-contains-customer_name-token invariant still holds at 1.0 on sampled non-null rows), so this is missingness, not value corruption. The reduced file size (16914 to 14859 bytes) is consistent with many now-empty email fields. All other columns check out: amount/unit_price means drift only modestly with decimal_places unchanged ({2:200}) and the arithmetic invariant amount == quantity*unit_price still holding; status vocabulary (pending/delivered/shipped/cancelled) and discount_pct values (0/5/10/15) are unchanged; order_date is still YYYY-MM-DD; no columns renamed/added/dropped; no type changes; no duplicate rows. The order_id/customer_id range shifts are normal day-over-day identifier movement. Downstream analytics relying on email for joins, dedupe, or contact match-rates would silently lose more than half their coverage."
+}

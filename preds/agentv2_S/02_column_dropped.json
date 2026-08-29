@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "Yesterday's file had 10 columns; today's has 9. The `discount_pct` column (last column in day1.csv, fully populated with null_rate 0.0, values 0/10/15, mean 5.075) is absent from day2.csv's column list and column_stats. The file still loads and parses, but any downstream computation using discount_pct (net revenue, margin, discount reporting) will break or silently null out. Other differences are noise: email null_rate 0.015→0.030 is only 3→6 rows on n=200; mean shifts in quantity/amount/unit_price are within normal day-over-day sampling and the amount==quantity*unit_price invariant still holds at 1.0; date format, status vocabulary, decimal precision, and dup rate are all unchanged."
+}

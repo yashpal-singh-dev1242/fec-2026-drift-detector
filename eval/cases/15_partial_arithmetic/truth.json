@@ -1,0 +1,16 @@
+{
+  "defect_type": "cross_column_invariant_broken",
+  "affected_columns": [
+    "amount",
+    "quantity",
+    "unit_price"
+  ],
+  "severity": "high",
+  "schema_check_catches": false,
+  "marginals_preserved": true,
+  "description": "8% of rows have amount inconsistent with quantity*unit_price (stale price table); marginal distribution barely moves",
+  "case_id": "15_partial_arithmetic",
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
+}

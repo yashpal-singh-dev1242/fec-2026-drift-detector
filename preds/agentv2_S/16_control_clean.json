@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match day-over-day in name, order, dtype, and format. order_date stays YYYY-MM-DD; status keeps the same 4-value vocabulary; discount_pct keeps {0,5,10,15} at 1 decimal; unit_price and amount keep 2 decimals (no precision loss); email null rate is unchanged at 0.5% (no null surge) and domain/length are stable (no encoding corruption). Row count (200), column count (10), and byte size (~17KB) are essentially unchanged, and duplicate_rate is 0. Both discovered invariants (amount == quantity*unit_price; email token from customer_name) hold at 100% on today's sample. The modest mean shifts in quantity (5.17→4.95), unit_price (462→438), and amount (2397→2139) are mutually consistent (arithmetic still holds) and within normal sampling variation. order_id range shift (1000s→2000s) is expected identifier drift, not contract drift. No defect."
+}
