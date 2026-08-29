@@ -317,3 +317,55 @@ Third-party components: see [`LICENSES.md`](LICENSES.md).
 | Corpus is deterministic | `bash run.sh verify` prints `csv sha256: 931dfa2524951ebb` |
 | Profiler compresses 806x | `src/tools/profile.py`; sizes in section 3 |
 | Invariants are discovered, not hardcoded | `src/tools/invariants.py`, `discover()` |
+
+---
+
+## 13. Verifying this submission in 10 minutes
+
+For a reviewer who wants to confirm the claims without spending anything.
+
+**1. Reproduce every number (about 1 minute, $0.00)** -- run `bash run.sh verify`
+
+It rebuilds the Docker image, regenerates the corpus from its seed, prints the
+corpus hash, and re-scores all five prediction sets. Measured cold with no
+Docker cache: 57 seconds.
+
+**2. Confirm the corpus was not tampered with**
+
+The printed `csv sha256: 931dfa2524951ebb` is computed over the regenerated CSV
+bytes. It matches the committed corpus, so the data being scored is the data
+the generator produces from seed 20260828.
+
+**3. Confirm the baseline really does fail at scale**
+
+`results/evidence/baseline_L_attempt.json` is the unedited API response:
+`"result": "Prompt is too long"`, `"is_error": true`, exit code 1, 116 ms,
+$0.00. The request was rejected before reaching the model.
+
+**4. Audit any single case end to end, without running anything**
+
+Take case 13, where `amount` is decoupled from `quantity x unit_price`:
+
+- Evidence the agent received: `_profiles/S/13_amount_decoupled/`
+- Agent v1 reasoning and verdict: `traces/01-v1-case13-blindspot.jsonl` (reports a clean feed)
+- Agent v2 reasoning and verdict: `traces/02-v2-case13-invariant-catch.jsonl` (invariant hold rate 1.000 to 0.015)
+- Raw API responses with token counts: `_raw/agent_S_13_amount_decoupled.json` and `_raw/agentv2_S_13_amount_decoupled.json`
+- Scored outcome: `results/agent_S_extended.json` and `results/agentv2_S.json`
+
+That chain covers the project's central claim: the same model, on the same
+file, was blind until the evidence changed.
+
+**5. Re-run the agent live (optional, needs Claude Code, about $1)** -- run
+`./run.sh agent-v2 S`
+
+Agent runs are non-deterministic, so expect a score near 0.944 rather than
+exactly it. The committed predictions and their raw responses are the record of
+what was measured.
+
+---
+
+## 14. Author
+
+Yashpal Singh. GitHub `yashpal-singh-dev1242`. Commits before 29 Aug 2026 carry
+a prior git identity (`thecoders037`) from an unconfigured local git setup; all
+commits in this repository are the author's own work.
