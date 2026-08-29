@@ -1,3 +1,5 @@
 _verify/
 eval/cases_M/
 eval/cases_L/
+__pycache__/
+*.pyc
