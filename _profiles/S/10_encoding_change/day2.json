@@ -1,0 +1,278 @@
+{
+  "file": "day2.csv",
+  "bytes": 17291,
+  "rows": 200,
+  "columns": [
+    "order_id",
+    "customer_id",
+    "customer_name",
+    "order_date",
+    "status",
+    "quantity",
+    "unit_price",
+    "amount",
+    "email",
+    "discount_pct"
+  ],
+  "n_columns": 10,
+  "duplicate_rows": 0,
+  "duplicate_rate": 0.0,
+  "column_stats": [
+    {
+      "name": "order_id",
+      "dtype": "int",
+      "null_rate": 0.0,
+      "distinct_approx": 200,
+      "distinct_capped": false,
+      "samples": [
+        "2000",
+        "2001",
+        "2002",
+        "2003",
+        "2004"
+      ],
+      "numeric": {
+        "min": 2000.0,
+        "max": 2199.0,
+        "mean": 2099.5,
+        "decimal_places": {
+          "0": 200
+        },
+        "zero_fraction_rate": 1.0
+      },
+      "length_min_max": [
+        4,
+        4
+      ]
+    },
+    {
+      "name": "customer_id",
+      "dtype": "str",
+      "null_rate": 0.0,
+      "distinct_approx": 200,
+      "distinct_capped": false,
+      "samples": [
+        "C19646",
+        "C51538",
+        "C72005",
+        "C71456",
+        "C18466"
+      ],
+      "top_values": {
+        "C19646": 1,
+        "C51538": 1,
+        "C72005": 1,
+        "C71456": 1,
+        "C18466": 1
+      },
+      "length_min_max": [
+        6,
+        6
+      ]
+    },
+    {
+      "name": "customer_name",
+      "dtype": "str",
+      "null_rate": 0.0,
+      "distinct_approx": 160,
+      "distinct_capped": false,
+      "samples": [
+        "Kabir Das",
+        "Meera Chopra",
+        "Rohan Chopra",
+        "OmÃ¡r VermÃ¡",
+        "Kabir Rao"
+      ],
+      "non_ascii_rate": 0.305,
+      "top_values": {
+        "Arjun Bose": 4,
+        "Meera Joshi": 3,
+        "Dev Bose": 3,
+        "Dev Joshi": 3,
+        "Arjun Iyer": 3
+      },
+      "length_min_max": [
+        8,
+        17
+      ]
+    },
+    {
+      "name": "order_date",
+      "dtype": "date",
+      "null_rate": 0.0,
+      "distinct_approx": 27,
+      "distinct_capped": false,
+      "samples": [
+        "2026-08-03",
+        "2026-08-04",
+        "2026-08-11",
+        "2026-08-01",
+        "2026-08-26"
+      ],
+      "date_formats": {
+        "YYYY-MM-DD": 200
+      },
+      "length_min_max": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "status",
+      "dtype": "str",
+      "null_rate": 0.0,
+      "distinct_approx": 4,
+      "distinct_capped": false,
+      "samples": [
+        "delivered",
+        "cancelled",
+        "shipped",
+        "shipped",
+        "delivered"
+      ],
+      "top_values": {
+        "pending": 54,
+        "cancelled": 51,
+        "delivered": 49,
+        "shipped": 46
+      },
+      "length_min_max": [
+        7,
+        9
+      ]
+    },
+    {
+      "name": "quantity",
+      "dtype": "int",
+      "null_rate": 0.0,
+      "distinct_approx": 9,
+      "distinct_capped": false,
+      "samples": [
+        "8",
+        "2",
+        "4",
+        "8",
+        "1"
+      ],
+      "numeric": {
+        "min": 1.0,
+        "max": 9.0,
+        "mean": 4.8,
+        "decimal_places": {
+          "0": 200
+        },
+        "zero_fraction_rate": 1.0
+      },
+      "length_min_max": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "unit_price",
+      "dtype": "float",
+      "null_rate": 0.0,
+      "distinct_approx": 200,
+      "distinct_capped": false,
+      "samples": [
+        "690.79",
+        "374.43",
+        "419.70",
+        "240.19",
+        "375.95"
+      ],
+      "numeric": {
+        "min": 9.25,
+        "max": 890.5,
+        "mean": 437.8881,
+        "decimal_places": {
+          "2": 200
+        },
+        "zero_fraction_rate": 0.005
+      },
+      "length_min_max": [
+        4,
+        6
+      ]
+    },
+    {
+      "name": "amount",
+      "dtype": "float",
+      "null_rate": 0.0,
+      "distinct_approx": 200,
+      "distinct_capped": false,
+      "samples": [
+        "5526.32",
+        "748.86",
+        "1678.80",
+        "1921.52",
+        "375.95"
+      ],
+      "numeric": {
+        "min": 9.39,
+        "max": 7073.55,
+        "mean": 2147.8466,
+        "decimal_places": {
+          "2": 200
+        },
+        "zero_fraction_rate": 0.005
+      },
+      "length_min_max": [
+        4,
+        7
+      ]
+    },
+    {
+      "name": "email",
+      "dtype": "str",
+      "null_rate": 0.03,
+      "distinct_approx": 183,
+      "distinct_capped": false,
+      "samples": [
+        "kabir82@example.com",
+        "meera78@example.com",
+        "rohan57@example.com",
+        "omar40@example.com",
+        "kabir98@example.com"
+      ],
+      "top_values": {
+        "meera75@example.com": 3,
+        "anya85@example.com": 2,
+        "priya81@example.com": 2,
+        "sana66@example.com": 2,
+        "kabir60@example.com": 2
+      },
+      "length_min_max": [
+        17,
+        20
+      ]
+    },
+    {
+      "name": "discount_pct",
+      "dtype": "float",
+      "null_rate": 0.0,
+      "distinct_approx": 4,
+      "distinct_capped": false,
+      "samples": [
+        "10.0",
+        "10.0",
+        "0.0",
+        "10.0",
+        "0.0"
+      ],
+      "numeric": {
+        "min": 0.0,
+        "max": 15.0,
+        "mean": 4.05,
+        "decimal_places": {
+          "1": 200
+        },
+        "zero_fraction_rate": 1.0
+      },
+      "length_min_max": [
+        3,
+        4
+      ]
+    }
+  ]
+}

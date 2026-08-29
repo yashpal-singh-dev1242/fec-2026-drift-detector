@@ -1,0 +1,36 @@
+{
+  "sampled_rows": {
+    "reference": 300,
+    "candidate": 300
+  },
+  "invariants_discovered_in_reference": 2,
+  "invariants": [
+    {
+      "kind": "arithmetic",
+      "expr": "amount == quantity * unit_price",
+      "cols": [
+        "amount",
+        "quantity",
+        "unit_price"
+      ],
+      "op": "a == b * c",
+      "ref_hold_rate": 1.0,
+      "candidate_hold_rate": 1.0,
+      "n_checked": 300,
+      "status": "holds"
+    },
+    {
+      "kind": "referential",
+      "expr": "email contains a token from customer_name",
+      "cols": [
+        "email",
+        "customer_name"
+      ],
+      "ref_hold_rate": 1.0,
+      "candidate_hold_rate": 1.0,
+      "n_checked": 293,
+      "status": "holds"
+    }
+  ],
+  "broken": []
+}
