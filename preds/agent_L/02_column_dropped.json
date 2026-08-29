@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "The 'discount_pct' column present in day1 (10 columns) is entirely absent in day2 (9 columns); n_columns dropped 10→9 and file size shrank ~3.7%, consistent with removing one narrow numeric column. All other columns are stable: unit_price mean 450.32→451.71, amount mean 2244→2260, quantity mean ~4.99, status vocabulary (4 values), date format YYYY-MM-DD, email null rate ~1.9%, decimal places and lengths all unchanged. The order_id range shift (1000–50999 → 101000–150999) is normal identifier drift, not a defect. Downstream discount/margin analytics that reference discount_pct will error or silently null out."
+}

@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id",
+    "cust_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "The second column was silently renamed from `customer_id` (day1) to `cust_id` (day2). The underlying data is unchanged: same string dtype, same `C`-prefixed 6-character customer key format, same length_min_max [6,6], same 0.0 null rate, and same capped distinct_approx of 20000. All other columns are consistent (status vocabulary, date format YYYY-MM-DD, quantity/unit_price/amount magnitude and 2-decimal precision, discount_pct domain, email null rate ~2%). The order_id range shift (1000–50999 → 101000–150999) is a normal day-over-day identifier range change, not drift. The file still has 10 columns and parses, but downstream code keyed on `customer_id` will hit a missing-column failure or silently null out the customer key, corrupting every customer-level join, dedup, and aggregation."
+}

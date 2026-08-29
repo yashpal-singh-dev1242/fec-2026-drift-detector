@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "promo_code"
+  ],
+  "defect_type": "column_added",
+  "severity": "medium",
+  "explanation": "Today's file has 11 columns vs yesterday's 10; a new trailing column `promo_code` (str, 47% null, 2 distinct values SAVE10/FREESHIP) was introduced. All 10 pre-existing columns are unchanged in name, order, dtype, precision, and date format. This is an additive schema/contract change that will break position-based readers, fixed-schema loads, or column-count validation downstream. Other day-over-day differences (order_id/customer_id ranges, ~15% lower unit_price/amount means with intact ranges and precision, status count reshuffling) are normal sampling/identifier variation, not drift."
+}

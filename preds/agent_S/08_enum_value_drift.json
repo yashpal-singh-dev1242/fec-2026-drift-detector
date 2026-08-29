@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "status"
+  ],
+  "defect_type": "enum_value_drift",
+  "severity": "high",
+  "explanation": "The `status` categorical vocabulary changed case from lowercase to uppercase: day1 had {delivered, pending, shipped, cancelled}, day2 has {DELIVERED, PENDING, SHIPPED, CANCELLED}. Distinct count (4), string lengths ([7,9]), null rate (0.0), and the frequency distribution are all essentially unchanged, so the file parses fine and looks normal — but any downstream code that matches literal status values (filters, joins to a status dimension, enum mappings, cross-day groupby keys) will silently fail to match or split one category into two across the day1/day2 boundary. All other columns are clean: ID ranges shifted as expected for a daily feed; unit_price/amount show only minor sampling variation with unchanged 2-decimal precision and magnitude; order_date is still YYYY-MM-DD; email null rate actually decreased (0.03 → 0.015); schema, column order, and dtypes are identical."
+}

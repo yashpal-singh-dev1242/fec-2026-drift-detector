@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "unit_change",
+  "severity": "critical",
+  "explanation": "The `amount` column changed from dollars (float, 2 decimal places, mean ~2,502, range 40.63–7,902.81) to integer cents (int, 0 decimal places, mean ~211,556, range 4,632–798,858) — an ~100× magnitude inflation plus a float→int type/precision change. Confirmed by cross-checking line items: yesterday amount ≈ unit_price×quantity in dollars (496.7×5.05≈2,507≈2,502); today amount ≈ unit_price×quantity×100 (row 1: 700.10×1×100 = 70010 exactly). The file still parses, but every revenue, AOV, and margin metric downstream is inflated ~100× and sub-cent precision is lost. No other columns show drift: unit_price still 2-decimal float, status vocabulary unchanged, date format unchanged, null rates stable, no dup/added/dropped columns; ID range shift is normal."
+}

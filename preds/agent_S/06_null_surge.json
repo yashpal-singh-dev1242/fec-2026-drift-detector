@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "email"
+  ],
+  "defect_type": "null_surge",
+  "severity": "high",
+  "explanation": "The email column's null_rate rose from 0.035 (yesterday) to 0.58 (today), a ~16x surge. Corroborating evidence: non-null distinct_approx dropped from 181 to 82 (consistent with only ~42% of 200 rows populated), the minimum length fell from 17 to 16, and file size shrank from 16,914 to 14,859 bytes despite identical row/column counts. The column still parses as a string, so the file loads fine, but downstream joins, dedupe, and contact/coverage analytics keyed on email would be silently corrupted. All other columns show only normal sampling variation: order_id range shift is expected identifier movement; unit_price/amount means moved modestly with unchanged magnitude, precision (2 dp), and dtype; status keeps the same 4-value vocabulary; dates remain YYYY-MM-DD; quantity and discount_pct ranges and decimal places are unchanged."
+}

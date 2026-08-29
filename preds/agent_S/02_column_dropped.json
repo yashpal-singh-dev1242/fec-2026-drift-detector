@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "The `discount_pct` column present yesterday (n_columns=10) is entirely absent today (n_columns=9) — gone from both the column list and column_stats. The feed still parses, but downstream analytics that compute net revenue/margin, discount cohorts, or reconcile `amount` against `quantity * unit_price * (1 - discount_pct/100)` will break or silently treat all discounts as zero. All other columns are stable: order_id range shift (1000s→2000s) is normal identifier drift; quantity/amount/unit_price means moved only within ordinary daily variation with unchanged dtypes, decimal places, and lengths; status vocabulary is unchanged; order_date format is still YYYY-MM-DD. The only minor secondary signal is email null_rate rising 0.015→0.03 (~3→6 rows), likely noise and not flagged as the primary defect."
+}

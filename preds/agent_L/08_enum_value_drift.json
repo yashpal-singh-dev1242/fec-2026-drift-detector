@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "status"
+  ],
+  "defect_type": "enum_value_drift",
+  "severity": "high",
+  "explanation": "All `status` values changed from lowercase (pending/delivered/shipped/cancelled) to uppercase (PENDING/DELIVERED/SHIPPED/CANCELLED). Distinct count (4), null rate (0.0), string lengths (7-9), and class balance are otherwise unchanged, so the file parses cleanly and looks normal. However, any downstream code that matches literal status strings — filters like status=='delivered', joins to a status dimension, dashboard groupings — will silently drop rows or return empty results. Other columns show no drift: order_id's range shift (1000-50999 -> 101000-150999) is normal identifier advancement; unit_price/amount magnitudes, decimal places, null rates, date format (YYYY-MM-DD), quantity/discount_pct distributions, and column set/order are all stable."
+}

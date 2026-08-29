@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "The order_id column changed from integer (dtype \"int\", values 1000-1199, length 4, with numeric stats) to string (dtype \"str\", values like \"ORD-2000\", length 8, now categorical with top_values). The primary key gained an \"ORD-\" prefix and zero-padding, changing its storage type. Although the file still parses, this breaks any day-over-day join keyed on order_id (integer keys never match \"ORD-...\" strings), numeric casts, sequence/max logic, and int-typed warehouse columns. This is distinct from a normal identifier-range shift because the type itself changed. Minor secondary signal: email null_rate rose from 0.015 to 0.03 (3 to 6 rows), likely noise; status category mix shifted but vocabulary unchanged; all numeric columns stable in units, magnitude, and precision."
+}

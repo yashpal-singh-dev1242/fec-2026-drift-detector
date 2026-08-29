@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns match day-over-day in name, order, dtype, null rate, and precision. Date format is YYYY-MM-DD x200 both days. The status value vocabulary is unchanged (cancelled/shipped/pending/delivered). unit_price and amount keep the same magnitude, 2-decimal precision, and the invariant amount = unit_price * quantity (verified against all sample rows both days), so no unit or precision drift. email null rate is identical (0.015). No duplicate rows, no encoding artifacts (all ASCII, stable byte size). The only day-over-day changes are minor mean shifts in quantity (4.63->5.06) and discount_pct (4.78->5.48), both within normal sampling variation for 200 rows over small discrete ranges. order_id/customer_id range shifts are expected identifier movement, not drift."
+}

@@ -1,0 +1,7 @@
+{
+  "has_defect": true,
+  "affected_columns": [],
+  "defect_type": "duplicate_rows",
+  "severity": "high",
+  "explanation": "Today's file reports duplicate_rows=7500 (duplicate_rate 13.04%) versus 0 yesterday. Row count rose exactly 50,000 to 57,500 (+7,500), matching the duplicate count exactly, so the added rows are full-row copies of existing records rather than genuine new orders. The file still parses and passes schema validation (same 10 columns, dtypes, date format YYYY-MM-DD, value vocabularies, 2-decimal precision on unit_price/amount, and amount = unit_price*quantity still holds on row-aligned samples). The order_id range shift (1000-50999 to 101000-150999) is a normal identifier-range change, not drift. The email null rate change (1.91% to 2.05%) is negligible. The sole defect is the duplicate-row surge, which will inflate every non-deduplicated downstream aggregate (total revenue, order counts, per-customer and per-status rollups) by roughly 13%."
+}

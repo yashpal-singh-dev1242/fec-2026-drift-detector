@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "unit_change",
+  "severity": "critical",
+  "explanation": "The `amount` column changed from dollars (float, 2 decimal places, mean 2256.05, min 5.28, max 8099.55) to integer cents (int, 0 decimal places, mean 226101.01, min 514, max 809901). Every summary statistic scales ~100x, decimal_places goes 2->0, dtype flips float->int, and zero_fraction_rate goes 0.0229->1.0 (all values now whole numbers). Sample verification: today unit_price=417.38, amount=83476 = 417.38 x 2 x 100; yesterday amount ~= unit_price x quantity in dollars. unit_price itself is unchanged (still dollars, 2 decimals), so the two money columns are now in inconsistent units. Any downstream revenue sum, average order value, margin, or discount computation over `amount` is silently inflated 100x with no parse failure, and the original sub-cent precision in `amount` is lost. This is simultaneously a unit change (x100), a type change (float->int), and a precision loss, but the root cause is the unit switch to cents."
+}

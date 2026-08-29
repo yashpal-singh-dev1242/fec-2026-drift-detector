@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "unit_price",
+    "amount"
+  ],
+  "defect_type": "precision_loss",
+  "severity": "high",
+  "explanation": "unit_price and amount lost sub-dollar precision. Yesterday unit_price samples had real cents (260.04, 645.21) with zero_fraction_rate 0.0105 and 20000+ distinct values; today all values are whole dollars (665.00, 47.00, 332.00) with zero_fraction_rate 1.0 and only 896 distinct values. amount shows the identical pattern (zero_fraction_rate 0.0233→1.0, distinct 20000→7303), consistent with being recomputed from the rounded unit_price. decimal_places still reports {\"2\": 50000} because values remain formatted as X.00, so type/schema checks pass and the file loads fine — but every price and line total is now rounded to whole dollars, corrupting revenue, margin, tax, and discount analytics. Identifier range shift in order_id (1000–50999 → 101000–150999) and status count reshuffling are normal and not drift."
+}

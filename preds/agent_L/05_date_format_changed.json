@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_date"
+  ],
+  "defect_type": "date_format_changed",
+  "severity": "high",
+  "explanation": "order_date switched from ISO YYYY-MM-DD (all 50000 rows yesterday) to slash-delimited D/M/Y today (all 50000 rows: e.g. 16/08/2026, 25/08/2026, 09/08/2026). The file still loads and the column still profiles as a date with 10-char length, 0 nulls, and 27 distinct values, so the change is silent. Downstream parsers expecting ISO will break or, worse, the new format is ambiguous between DD/MM/YYYY and MM/DD/YYYY — rows where both components are <=12 will be silently transposed, corrupting any date-based aggregation. All other columns are clean: order_id's range shift (1000-50999 -> 101000-150999) is normal identifier drift; schema, status vocabulary, numeric magnitudes/precision, null rates, and duplicate rate are all stable."
+}

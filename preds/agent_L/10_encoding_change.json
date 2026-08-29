@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_name"
+  ],
+  "defect_type": "encoding_change",
+  "severity": "high",
+  "explanation": "day2's customer_name shows classic UTF-8-to-Latin1 mojibake: non_ascii_rate jumped to 0.2744 (field absent yesterday), a sample reads \"Arjun DÃ¡s\" (from \"Dás\", where á=0xC3 0xA1 was re-decoded as CP1252 into Ã¡), max string length grew from 13 to 17, distinct_approx nearly doubled (224 to 430) as accented names split into clean+corrupted variants, and file size rose ~3%. This silently fragments any grouping, join, or matching on customer name downstream. All other columns (ids, prices, amount, quantity, status vocabulary, date format, discount) are stable; the order_id range shift is normal identifier movement."
+}

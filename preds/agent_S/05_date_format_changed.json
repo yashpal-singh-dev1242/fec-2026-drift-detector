@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_date"
+  ],
+  "defect_type": "date_format_changed",
+  "severity": "high",
+  "explanation": "order_date changed from unambiguous ISO YYYY-MM-DD (200/200 rows) yesterday to slash-delimited DD/MM/YYYY (profiler-classified as ambiguous \"DD/MM/YYYY or MM/DD/YYYY\", 200/200 rows) today. Same length (10), zero nulls, same distinct count (27), so no load/schema check catches it. Downstream date parsers expecting ISO will null every row or coerce to wrong dates; the day/month ambiguity means locale-dependent parsers will misread rows where the day is <=12 and fail on the rest, corrupting any time-series aggregation, cohorting, or date-keyed joins. All other columns (schema, numeric magnitudes/units/precision, null rates, status vocabulary, duplicates, encoding) are within normal day-over-day variance; identifier range shifts in order_id/customer_id are expected and not drift."
+}

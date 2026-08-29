@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id",
+    "cust_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "The second column changed header from `customer_id` (day1) to `cust_id` (day2) while remaining semantically identical: same `Cxxxxx` format, length 6/6, dtype str, 0.0 null rate, and 200 distinct (fully unique) values. This is a pure rename, not an add/drop. Downstream analytics that join or aggregate on `customer_id` will break silently (nulls, dropped rows, or broken customer-level rollups) even though the CSV still loads and parses. All other columns are stable: `order_date` remains YYYY-MM-DD, `status` keeps the same four-value vocabulary, numeric columns keep the same decimal precision and magnitude, no null surges (email nulls actually decreased), and there are no duplicate rows. Day-over-day ID range shifts (order_id 1000s→2000s) are normal."
+}

@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "The order_id primary key changed from an integer (dtype \"int\", samples 1000-1004, range 1000-50999, length 4-5) to a formatted string (dtype \"str\", samples \"ORD-101000\"-\"ORD-101004\", fixed length 10). The file still parses, but any downstream join, lookup, numeric cast, range filter, or max-watermark on order_id silently fails or coerces to NULL because int keys no longer match the \"ORD-<n>\" string keys, and referential-integrity/dedup checks against history all miss. All other columns (customer_id, customer_name, order_date format, status vocabulary, quantity, unit_price, amount magnitudes/precision, discount_pct, email null rate) are stable within normal day-over-day noise. The accompanying identifier-range shift is expected and not itself drift; the type/format change is the defect."
+}

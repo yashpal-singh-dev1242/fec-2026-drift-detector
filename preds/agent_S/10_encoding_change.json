@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_name"
+  ],
+  "defect_type": "encoding_change",
+  "severity": "high",
+  "explanation": "The customer_name column shows encoding corruption (mojibake). Today's profile has a new non_ascii_rate of 0.305 and a sample value 'OmÃ¡r VermÃ¡', which is the UTF-8 byte sequence for accented characters (e.g. 'á' = 0xC3 0xA1) misdecoded as Latin-1/CP-1252 into 'Ã¡'. Corroborating: max name length rose 13→17 with an unchanged 'First Last' naming scheme (accented chars expanding to 2 chars), and file size grew despite identical row/column counts. This silently fragments any join/dedup/group-by on customer_name. Other differences (order_id/customer_id range shifts, discount_pct mean 5.0→4.05, email null_rate 0.015→0.03, unit_price/amount min values) are within normal day-over-day variation; dtypes, decimal places, date format (YYYY-MM-DD), status vocabulary, and column set are all unchanged."
+}
