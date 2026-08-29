@@ -7,6 +7,12 @@ CASES_DIR="eval/cases"; [ "$SCALE" != "S" ] && CASES_DIR="eval/cases_${SCALE}"
 PRED="preds/${LABEL}"; PROF="_profiles/${SCALE}"
 mkdir -p "$PRED" "$PROF" _raw
 
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) MOUNT="//${PWD#/}" ;;
+  *)                    MOUNT="$PWD" ;;
+esac
+
+
 SCHEMA='{"type":"object","properties":{"has_defect":{"type":"boolean"},"affected_columns":{"type":"array","items":{"type":"string"}},"defect_type":{"type":"string","enum":["column_renamed","column_dropped","column_added","type_changed","date_format_changed","null_surge","unit_change","enum_value_drift","precision_loss","encoding_change","duplicate_rows","cross_column_invariant_broken","none"]},"severity":{"type":"string","enum":["none","low","medium","high","critical"]},"explanation":{"type":"string"}},"required":["has_defect","affected_columns","defect_type","severity","explanation"]}'
 
 LIST="$*"; [ -z "$LIST" ] && LIST=$(ls "$CASES_DIR")
@@ -16,7 +22,7 @@ for C in $LIST; do
   [ -f "$PRED/$C.json" ] && { echo "skip $C (cached)"; continue; }
   printf '%-26s ' "$C"
   mkdir -p "$PROF/$C"
-  docker run --rm -v "//c/Users/yashp/projects/fec-2026://app" -w //app drift sh -c "
+  docker run --rm -v "${MOUNT}://app" -w //app drift sh -c "
     python -m src.tools.profile $CASES_DIR/$C/day1.csv > $PROF/$C/day1.json
     python -m src.tools.profile $CASES_DIR/$C/day2.csv > $PROF/$C/day2.json
     python -m src.tools.invariants $CASES_DIR/$C/day1.csv $CASES_DIR/$C/day2.csv > $PROF/$C/invariants.json" || { echo "PROFILE FAIL"; continue; }
