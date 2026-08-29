@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "email"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "high",
+  "explanation": "In day1, email is deterministically derived from customer_name (local-part = lowercased first name + number) for all 200 non-blank rows (e.g. Anya Kapoor -> anya93@example.com, Kabir Nair -> kabir6@example.com). In day2 this invariant is broken: emails no longer correspond to the customer's name (Vikram Reddy -> zara85@example.com, Ishaan Kapoor -> priya39@example.com, Dev Reddy -> priya54@example.com), with essentially no rows matching. All other columns are stable: schema/column order unchanged, order_date format (YYYY-MM-DD), status enum, discount_pct values, customer_id format, and the amount = quantity * unit_price arithmetic invariant all hold in both files, and the blank-email rate is comparable. Downstream analytics that key on email for customer identity (dedup, customer-level rollups, CRM joins, marketing sends) will be corrupted; numeric aggregates are unaffected."
+}

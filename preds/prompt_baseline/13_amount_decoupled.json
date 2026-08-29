@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "critical",
+  "explanation": "In day1, amount == quantity * unit_price exactly for all 200 rows (discount_pct not applied). In day2 this invariant is broken for essentially every row. The amount values have been permuted across rows: each day2 amount equals some other row's quantity*unit_price (e.g. row 2000 computes 1585.12 but shows 2977.85; 1585.12 instead appears on row 2065; row 2001 computes 3242.82 but shows 4700.99, which appears on row 2041; row 2003 computes 2102.65, shown value 524.76, correct value lands on row 2181). Because it is a permutation, SUM/AVG/MIN/MAX of amount are unchanged versus yesterday, so top-line dashboards look fine while every per-row and per-segment metric (revenue by customer/status/date, AOV distribution, margin, discount analysis, line-item reconciliation, joins carrying amount) is corrupted. All other columns (order_date format, status enum, quantity, unit_price, discount_pct, email including blanks) are structurally unchanged; order_id advancing 1000->2000 is expected for a daily feed."
+}

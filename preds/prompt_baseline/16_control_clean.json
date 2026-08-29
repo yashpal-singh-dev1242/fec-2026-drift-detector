@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "Header, column order, and count are identical (10 columns). Both files have 200 rows with unique sequential order_ids. All per-column properties match between days: order_date stays YYYY-MM-DD (Aug 2026); status enum is the same 4 lowercase values; quantity stays integer 1-9; unit_price and amount stay 2-decimal with comparable ranges (no unit change or precision loss); email keeps the first##@example.com pattern with exactly one blank row in each file (no null surge); discount_pct keeps the {0,5,10,15} domain. Cross-column invariants also hold in both files: amount == quantity * unit_price on every checked row (discount_pct is informational and never applied to amount in either feed), and the email prefix matches the customer's first name. No drift that would corrupt downstream analytics."
+}

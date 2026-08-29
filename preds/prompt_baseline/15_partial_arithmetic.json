@@ -1,0 +1,10 @@
+{
+  "$FUNCTION_NAME": "StructuredOutput",
+  "has_defect": true,
+  "affected_columns": [
+    "amount"
+  ],
+  "defect_type": "cross_column_invariant_broken",
+  "severity": "medium",
+  "explanation": "In day1, amount == quantity * unit_price exactly for all 200 rows (discount_pct is never applied). In day2 this invariant is broken for 16 of 200 rows (~8%): order_ids 2013, 2035, 2036, 2042, 2090, 2092, 2093, 2106, 2113, 2128, 2132, 2143, 2155, 2166, 2168, 2189, where amount exceeds quantity*unit_price by a variable ~4-9%. The inflation is not a constant factor, not a unit/sign change, and does not correlate with discount_pct, suggesting an undocumented surcharge/tax leaking into amount or a partial rollout of a new amount formula. Schema, dtypes, date format, enums, null rates, and discount_pct are otherwise unchanged. Downstream revenue reconciliation, per-unit price derivation, and margin analytics will be silently corrupted on the affected rows (revenue overstated), while the 92% of clean rows let naive checks pass."
+}
