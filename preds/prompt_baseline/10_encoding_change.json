@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_name"
+  ],
+  "defect_type": "encoding_change",
+  "severity": "high",
+  "explanation": "day1 customer names are all plain ASCII (e.g. \"Omar Verma\", \"Zara Gill\"). In day2, ~28% of rows (55-60 of 200) contain UTF-8 mojibake such as \"OmÃ¡r VermÃ¡\", \"ZÃ¡rÃ¡ Gill\", \"IshÃ¡Ã¡n ShÃ¡rmÃ¡\" — the byte sequence for accented characters like \"á\" (UTF-8 0xC3 0xA1) being decoded as Windows-1252/Latin-1. The upstream feed began emitting accented names and/or changed encoding, and the file is now read with the wrong codec. This corrupts name-based joins, deduplication, customer matching, and any grouping/display keyed on customer_name, since the same customer now appears under two spellings across days. Numeric fields (quantity, unit_price, amount = quantity*unit_price, discount_pct) and order_date/status are unchanged. A minor secondary observation: email blanks rose from 3 to 6 rows, small and likely noise, not corrupting."
+}

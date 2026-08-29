@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "unit_price",
+    "amount"
+  ],
+  "defect_type": "precision_loss",
+  "severity": "medium",
+  "explanation": "In day1, unit_price and amount carry two-decimal precision and amount reconciles exactly to quantity*unit_price on every row. In day2, every unit_price and amount value ends in .00 — fractional/cents precision has been stripped, apparently by rounding each column independently to whole numbers. As a result the row-level identity amount = quantity*unit_price no longer holds (gaps of roughly -3 to +3 dollars), unit-economics and average-selling-price metrics are biased by up to ~$0.50/unit, and any cent-level financial rollup loses its least significant digit. Schema, date format, status enum, quantity/discount ranges, and the pre-existing sparse email blanks are unchanged; the new order_id range is expected daily rotation."
+}

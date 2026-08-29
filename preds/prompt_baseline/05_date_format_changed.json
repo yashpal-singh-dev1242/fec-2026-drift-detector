@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_date"
+  ],
+  "defect_type": "date_format_changed",
+  "severity": "high",
+  "explanation": "order_date changed from ISO 8601 (YYYY-MM-DD, e.g. 2026-08-07) in day1 to DD/MM/YYYY (e.g. 20/08/2026) in every row of day2. No schema/header change. Strict ISO parsers will reject values like 20/08/2026 (invalid month), dropping rows or erroring; lenient MM/DD parsers will silently misread ambiguous values like 06/08/2026 as June 8 instead of Aug 6, corrupting any date-based aggregation, joins, partitioning, and time-series reporting. All other columns (status enum, quantity/unit_price/amount consistency, discount_pct domain, customer_id/email/name formats, row count) are unchanged; email nulls decreased 7->3 so no null surge. order_id range shift 1000-1199 -> 2000-2199 is expected for a new daily batch."
+}

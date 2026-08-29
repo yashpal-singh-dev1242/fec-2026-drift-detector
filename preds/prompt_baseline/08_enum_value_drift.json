@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "status"
+  ],
+  "defect_type": "enum_value_drift",
+  "severity": "high",
+  "explanation": "The `status` column changed casing from lowercase (pending/shipped/delivered/cancelled) in day1 to UPPERCASE (PENDING/SHIPPED/DELIVERED/CANCELLED) in day2. The category set is otherwise identical. This is silent enum value drift: any downstream filter, GROUP BY, or join that matches status values literally will return zero rows or mis-bucket data day-over-day. All other columns (order_date format, amount = quantity*unit_price, email null rate, discount_pct, quantity, unit_price, id formats) are unchanged."
+}

@@ -1,0 +1,10 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "customer_id",
+    "cust_id"
+  ],
+  "defect_type": "column_renamed",
+  "severity": "high",
+  "explanation": "Today's file renames the second column from `customer_id` to `cust_id`. Column count, order, and all other columns (order_date format, status domain, quantity, unit_price, amount = qty*price relationship, discount_pct domain, email null pattern, C##### id format) are unchanged. The order_id range shift (1000s -> 2000s) and new rows are expected for a daily batch. The rename is a silent schema-contract break: downstream jobs joining/grouping on `customer_id` will error or, under positional/lenient loading, produce all-NULL customer keys, corrupting customer-level joins and aggregations."
+}

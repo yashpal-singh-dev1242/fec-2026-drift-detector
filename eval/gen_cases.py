@@ -3,8 +3,26 @@ import csv, json, random, hashlib, sys
 from pathlib import Path
 
 SEED = 20260828
-ROWS = 200
-OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "eval/cases")
+SCALES = {"S": 200, "M": 5000, "L": 50000}
+
+def _args():
+    a = sys.argv[1:]
+    scale = "S"
+    prev = None
+    if "--scale" in a:
+        i = a.index("--scale")
+        scale = a[i + 1].upper()
+        prev = i + 1
+    pos = [x for i, x in enumerate(a) if not x.startswith("--") and i != prev]
+    out = Path(pos[0]) if pos else Path(
+        "eval/cases" if scale == "S" else f"eval/cases_{scale}")
+    return scale, out
+
+SCALE, OUT = _args()
+ROWS = SCALES[SCALE]
+# day2 ids must never collide with day1 ids at any scale. At n=200 this
+# evaluates to 2000, preserving the original S-tier CSVs byte-for-byte.
+DAY2_START = 1000 + max(1000, ROWS * 2)
 
 COLS = ["order_id", "customer_id", "customer_name", "order_date",
         "status", "quantity", "unit_price", "amount", "email", "discount_pct"]
@@ -145,21 +163,23 @@ def main():
         d = OUT / cid
         d.mkdir(exist_ok=True)
         day1 = base_rows(rng, start_id=1000)
-        day2 = base_rows(rng, start_id=2000)
+        day2 = base_rows(rng, start_id=DAY2_START)
         rows, cols, truth = fn(day2, list(COLS), rng)
         write_csv(d / "day1.csv", day1, COLS)
         write_csv(d / "day2.csv", rows, cols)
-        truth.update(case_id=cid, has_defect=(truth["defect_type"] != "none"))
+        truth.update(case_id=cid, has_defect=(truth["defect_type"] != "none"),
+                     scale=SCALE, rows=ROWS)
         (d / "truth.json").write_text(json.dumps(truth, indent=2), encoding="utf-8")
         index.append({k: truth[k] for k in ("case_id", "has_defect", "defect_type",
                                             "severity", "schema_check_catches")})
     (OUT / "index.json").write_text(json.dumps(index, indent=2), encoding="utf-8")
     h = hashlib.sha256()
-    for p in sorted(OUT.rglob("*")):
-        if p.is_file():
-            h.update(p.read_bytes())
-    print(f"generated {len(CASES)} cases -> {OUT}")
-    print(f"corpus sha256: {h.hexdigest()[:16]}")
+    for p in sorted(OUT.rglob("*.csv")):
+        h.update(p.read_bytes())
+    total = sum(p.stat().st_size for p in OUT.rglob("*") if p.is_file())
+    print(f"generated {len(CASES)} cases at scale {SCALE} ({ROWS} rows) -> {OUT}")
+    print(f"corpus size: {total/1024/1024:.1f} MB")
+    print(f"csv sha256: {h.hexdigest()[:16]}")
     hard = [c for c in index if not c["schema_check_catches"] and c["has_defect"]]
     print(f"schema-invisible defects: {len(hard)}/{len(index)-1}")
 

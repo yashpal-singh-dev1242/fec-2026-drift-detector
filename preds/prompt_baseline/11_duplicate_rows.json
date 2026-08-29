@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "duplicate_rows",
+  "severity": "high",
+  "explanation": "day2.csv contains 230 data rows vs day1's 200: the 200 unique orders (2000-2199) plus 30 exact-duplicate rows appended after order_id 2199, repeating existing order_ids (2161, 2085, 2054, 2180, 2046, 2057, 2083, 2124, 2183, 2050, 2125, 2117, 2122, 2075, 2131, 2121, 2120, 2102, 2028, 2149, 2015, 2126, 2026, 2014, 2111, 2177, 2129, 2138, 2093, 2168). Each duplicate is byte-identical to its original. This double-counts 30 orders, inflating SUM(amount), row counts, units, and per-status/per-customer aggregates by a non-uniform ~15%, and would cause fan-out on any join keyed by order_id. Schema, column types, date format (ISO YYYY-MM-DD), enum values, and null rates are otherwise unchanged; the amount = quantity x unit_price relationship (discount not applied) holds in both files."
+}

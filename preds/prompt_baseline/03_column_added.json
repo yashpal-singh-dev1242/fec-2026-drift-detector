@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "promo_code"
+  ],
+  "defect_type": "column_added",
+  "severity": "low",
+  "explanation": "Today's file adds a new trailing column `promo_code` (values: empty, FREESHIP, or SAVE10) after `discount_pct`. All 10 original columns are unchanged in name, order, and content: no column shift (amount = quantity × unit_price still holds), order_date format is still YYYY-MM-DD, status domain is unchanged (pending/delivered/shipped/cancelled), discount_pct still {0,5,10,15}, quantity/unit_price/customer_id formats and ranges match, and the email null rate is comparable (~5 rows each day). The order_id renumbering (1000s → 2000s) is just the new daily batch. A header-appended column is additive and non-breaking for name-based readers, so severity is low; it would only corrupt downstream analytics if the loader parses by column position/count or enforces a strict schema, in which case it should be updated to recognize promo_code."
+}

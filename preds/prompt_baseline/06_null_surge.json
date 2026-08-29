@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "email"
+  ],
+  "defect_type": "null_surge",
+  "severity": "high",
+  "explanation": "The email column's missing-value rate jumped from ~3.5% (7 of 200 rows blank in day1) to ~58% (~116 of 200 rows blank in day2). Emails that are present remain correctly formatted (name##@example.com), so this is a silent fill-rate collapse, not a format or encoding change. All other columns are stable: identical schema/column order, order_id simply advanced to the next block (1000-1199 -> 2000-2199), order_date keeps the same YYYY-MM-DD format and date window, status keeps the same category set, quantity/unit_price/amount keep the same ranges with amount still equal to quantity*unit_price, and discount_pct keeps the same {0,5,10,15} value set. The email null surge would corrupt any downstream analytics that join, dedupe, or count distinct customers on email (identity resolution, marketing reachability, distinct-customer metrics); monetary aggregates are unaffected."
+}

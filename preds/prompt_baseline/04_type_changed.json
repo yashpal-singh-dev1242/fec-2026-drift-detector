@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "order_id"
+  ],
+  "defect_type": "type_changed",
+  "severity": "high",
+  "explanation": "The order_id column changed from a bare integer (1000-1199) to a prefixed string (\"ORD-2000\"-\"ORD-2199\"). This converts the primary key from numeric to non-numeric text, which breaks joins against historical integer keys (zero matches), breaks integer casts (errors/nulls), and breaks dedup/PK-uniqueness and sequence-gap checks. All other columns (order_date ISO format, status enum, quantity, unit_price, amount with its gross quantity*unit_price relationship, discount_pct domain, email blanks, customer_id format, and the header/column order) are unchanged. The ID number range shifting from 1000s to 2000s is just normal new-day data, not drift; the format prefix is the corrupting change."
+}

@@ -1,0 +1,7 @@
+{
+  "has_defect": false,
+  "affected_columns": [],
+  "defect_type": "none",
+  "severity": "none",
+  "explanation": "All 10 columns retain their name, order, data type, format, precision, units, categorical domain, and null rate between day1 and day2. order_date stays ISO YYYY-MM-DD (Aug 1-27 range both days); status keeps the same lowercase enum {delivered, shipped, pending, cancelled}; discount_pct keeps {0.0, 5.0, 10.0, 15.0}; unit_price and amount keep 2-decimal precision and the same ~11-899 / same magnitude ranges; amount = quantity * unit_price (gross, discount not applied) holds on every sampled row in both files; email null rate is 3/200 in both. The only differences are the actual sampled orders and the order_id block (1000-1199 -> 2000-2199), which is the expected new-day batch. No schema, format, unit, precision, encoding, or enum drift detected."
+}

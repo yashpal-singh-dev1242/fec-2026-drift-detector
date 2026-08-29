@@ -1,0 +1,9 @@
+{
+  "has_defect": true,
+  "affected_columns": [
+    "discount_pct"
+  ],
+  "defect_type": "column_dropped",
+  "severity": "high",
+  "explanation": "Today's file dropped the trailing `discount_pct` column entirely (header and all rows), going from 10 to 9 columns. All other columns are unchanged in type, format, units, and enum values, and amount ≈ quantity × unit_price still holds. The email blank rate rose slightly (3→6 of 200) but is within normal noise. Losing discount_pct breaks any positional or named read of that field and makes net-revenue/margin/discount analytics impossible to compute since `amount` is the gross line total."
+}
