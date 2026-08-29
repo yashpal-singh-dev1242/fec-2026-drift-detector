@@ -7,5 +7,7 @@
   "schema_check_catches": true,
   "description": "order_id changed from integer to prefixed string",
   "case_id": "04_type_changed",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }

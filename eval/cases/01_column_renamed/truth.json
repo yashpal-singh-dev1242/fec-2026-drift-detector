@@ -7,5 +7,7 @@
   "schema_check_catches": true,
   "description": "customer_id renamed to cust_id",
   "case_id": "01_column_renamed",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }

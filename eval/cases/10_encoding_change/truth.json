@@ -7,5 +7,7 @@
   "schema_check_catches": false,
   "description": "mojibake in customer_name from encoding mismatch",
   "case_id": "10_encoding_change",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }

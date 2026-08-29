@@ -7,5 +7,7 @@
   "schema_check_catches": false,
   "description": "status values changed to uppercase",
   "case_id": "08_enum_value_drift",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }

@@ -7,5 +7,7 @@
   "schema_check_catches": false,
   "description": "15% of rows duplicated, causing double counting",
   "case_id": "11_duplicate_rows",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }

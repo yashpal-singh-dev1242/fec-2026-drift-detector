@@ -7,5 +7,7 @@
   "schema_check_catches": true,
   "description": "new promo_code column appeared",
   "case_id": "03_column_added",
-  "has_defect": true
+  "has_defect": true,
+  "scale": "S",
+  "rows": 200
 }
