@@ -9,7 +9,13 @@
 set -euo pipefail
 IMG=drift
 HERE="$(cd "$(dirname "$0")" && pwd)"
-dk() { docker run --rm -v "//${HERE#/}://app" -w //app "$IMG" "$@"; }
+# Docker bind-mount paths differ between Git Bash on Windows (which needs a
+# leading // to stop MSYS rewriting the path) and Linux/macOS.
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) MOUNT="//${HERE#/}" ;;
+  *)                    MOUNT="$HERE" ;;
+esac
+dk() { docker run --rm -v "${MOUNT}://app" -w //app "$IMG" "$@"; }
 
 case "${1:-verify}" in
 verify)
