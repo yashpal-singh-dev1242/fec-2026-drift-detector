@@ -26,6 +26,18 @@ integers. Every downstream number is 100x wrong and every check is green.
 Measured on this project's 16-case corpus, a conventional schema validator
 catches **5 of 14** defects. The other 9 pass silently.
 
+**Why existing tools don't close this gap.** Great Expectations, Soda, Deequ and
+Anomalo are mature and in many ways more capable than this project. But they
+check rules you wrote in advance — `expect_column_values_to_be_between("amount",
+0, 10000)`. That works for the failure modes you anticipated. The Monday-morning
+problem is the one you did not. Nobody writes
+`expect_amount_to_equal_quantity_times_unit_price` before the day it breaks.
+
+This system discovers the invariant from yesterday's file and re-tests it
+against today's. No rule is authored in advance. See
+[`LIMITATIONS_AND_ATTACKS.md`](LIMITATIONS_AND_ATTACKS.md) for where rule-based
+tools remain the better choice.
+
 **What "solved" looks like:** by the time the engineer opens their laptop,
 they already have a report saying which column changed, what kind of change it
 was, how severe it is, and the evidence behind it — for feeds of any size.
@@ -182,8 +194,22 @@ agent v1. The schema validator is included as a second reference because it
 represents what teams actually run in production today.
 
 **The honest summary:** at small scale the direct prompt is a real competitor.
-The system wins on cost (42% fewer tokens), wins narrowly on accuracy, and is
-the only one of the two that runs at realistic feed sizes.
+The system wins on cost, wins narrowly on accuracy, and is the only one of the
+two that runs at realistic feed sizes.
+
+**On the token claim.** Each Claude Code invocation carries ~27,000 tokens of
+fixed overhead — system prompt, tool definitions, skill listings — before any
+content. That applies equally to both systems and compresses the apparent
+difference, so the saving is reported three ways rather than one:
+
+| Measure | Baseline | This system |
+|---|---|---|
+| Data sent to the model | full CSV (4.26 MB at L tier) | ~5 KB profile |
+| Data compression | none | 806x |
+| End-to-end tokens per case | ~34,600 | ~20,100 (42% fewer) |
+
+The scaling behaviour matters more than either figure: the baseline grows with
+row count and is rejected at 50,000 rows; this stays flat.
 
 ### Where the accuracy difference comes from
 
@@ -352,6 +378,7 @@ Third-party components: see [`LICENSES.md`](LICENSES.md).
 | Corpus is deterministic | `bash run.sh verify` prints `csv sha256: 931dfa2524951ebb` |
 | Profiler compresses 806x | `src/tools/profile.py`; sizes in section 3 |
 | Invariants are discovered, not hardcoded | `src/tools/invariants.py`, `discover()` |
+| Known limitations and objections | `LIMITATIONS_AND_ATTACKS.md` |
 
 ---
 
